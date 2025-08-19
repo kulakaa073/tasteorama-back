@@ -38,4 +38,6 @@ const recipeSchema = new Schema(
   },
 );
 
+recipeSchema.index({ userId: 1 });
+
 export const RecipesCollection = model('recipes', recipeSchema);

@@ -10,10 +10,8 @@ const parseSortBy = (sortBy) => {
   const keysOfContact = [
     '_id',
     'name',
-    'phoneNumber',
-    'email',
-    'isFavourite',
-    'contactType',
+    'time',
+    'popularity',
     'createdAt',
     'updatedAt',
   ];

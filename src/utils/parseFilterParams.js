@@ -1,14 +1,14 @@
-import { parseNumber, parseBoolean } from './parseHelpers';
-
-// do it category and ingredient like this or?
-const parseRecipeCategory = (type) => {
-  const isString = typeof type === 'string';
-  if (!isString) return;
-  const isType = (type) => ['work', 'home', 'personal'].includes(type);
-  if (isType(type)) return type;
+// do it for category and ingredient like this or?
+const parseRecipeCategory = (category) => {
+  if (typeof category !== 'string') return;
+  const validCategories = ['work', 'home', 'personal']; // fill in later
+  return validCategories.includes(category.trim())
+    ? category.trim()
+    : undefined;
 };
 
 // TODO
+// add energy and time filtering
 export const parseFilterParams = (query) => {
   const { name, category, ingredient } = query;
   const filter = {};
@@ -16,11 +16,16 @@ export const parseFilterParams = (query) => {
   if (typeof name === 'string' && name.trim() !== '') {
     filter.name = name.trim();
   }
-  if (typeof category === 'string' && category.trim() !== '') {
-    filter.category = category.trim();
+
+  const parsedCategory = parseRecipeCategory(category);
+  if (parsedCategory) {
+    filter.category = parsedCategory;
   }
-  if (typeof ingredient === 'string' && ingredient.trim() !== '') {
-    filter.ingredient = ingredient.trim();
+  if (ingredient) {
+    const ingredients = Array.isArray(ingredient) ? ingredient : [ingredient];
+    filter.ingredients = ingredients.filter(
+      (ing) => typeof ing === 'string' && ing.trim() !== '',
+    );
   }
 
   return filter;
