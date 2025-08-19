@@ -8,7 +8,14 @@ import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
 
-import { getRecipes } from '../services/recipes.js';
+import {
+  getRecipes,
+  getRecipeById,
+  createRecipe,
+  deleteRecipe,
+  toggleFavouriteRecipe,
+  updateRecipe,
+} from '../services/recipes.js';
 
 export const getRecipesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -104,7 +111,7 @@ export const createRecipeController = async (req, res) => {
 
 export const deleteRecipeController = async (req, res, next) => {
   const { recipeId } = req.params;
-  const recipe = await deleteRecipe(recipeId);
+  const recipe = await deleteRecipe(recipeId, req.user._id);
 
   if (!recipe) {
     next(createHttpError(404, 'Recipe not found'));
@@ -116,7 +123,7 @@ export const deleteRecipeController = async (req, res, next) => {
 
 export const toggleFavouriteRecipeController = async (req, res, next) => {
   const { recipeId } = req.params;
-  const result = await toggleFavouriteRecipeController({
+  const result = await toggleFavouriteRecipe({
     recipeId,
     userId: req.user._id,
   });
@@ -127,12 +134,12 @@ export const toggleFavouriteRecipeController = async (req, res, next) => {
 
   res.json({
     status: 200,
-    message: `Successfully favourited recipe with id ${recipeId}!`,
+    message: `Successfully toggled favourite recipe with id ${recipeId}!`,
     data: result,
   });
 };
 
-export const editRecipeController = async (req, res, next) => {
+export const updateRecipeController = async (req, res, next) => {
   const { recipeId } = req.params;
   const photo = req.file;
 
@@ -146,7 +153,7 @@ export const editRecipeController = async (req, res, next) => {
     }
   }
 
-  const result = await editRecipe(
+  const result = await updateRecipe(
     recipeId,
     {
       ...req.body,

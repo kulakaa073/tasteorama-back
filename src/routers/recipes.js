@@ -15,7 +15,7 @@ import {
   createRecipeController,
   deleteRecipeController,
   toggleFavouriteRecipeController,
-  //editRecipeController,
+  //updateRecipeController,
 } from '../controllers/recipes.js';
 
 const router = Router();
@@ -77,8 +77,8 @@ router.patch(
 //   authenticate,
 //   isValidId,
 //   upload.single('photo'),
-//   validateBody(editRecipeSchema),
-//   ctrlWrapper(editRecipeController),
+//   validateBody(updateRecipeSchema),
+//   ctrlWrapper(updateRecipeController),
 // );
 
 export default router;

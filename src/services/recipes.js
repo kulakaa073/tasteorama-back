@@ -74,3 +74,67 @@ export const getRecipes = async ({
     ...paginationData,
   };
 };
+
+export const getRecipeById = async (recipeId) => {
+  const recipe = await RecipesCollection.findOne(recipeId);
+  return recipe;
+};
+
+export const createRecipe = async (recipeData) => {
+  const recipe = await RecipesCollection.create(recipeData);
+  return recipe;
+};
+
+export const deleteRecipe = async (recipeId, userId) => {
+  const recipe = await RecipesCollection.findOneAndDelete({
+    _id: recipeId,
+    userId,
+  });
+  return recipe;
+};
+
+export const toggleFavouriteRecipe = async (recipeId, userId) => {
+  // Check if recipe exists to not add shadow recipes to collection
+  const recipe = await RecipesCollection.findById(recipeId);
+  if (!recipe) {
+    return null;
+  }
+
+  const existingFavourite = await FavouriteCollection.findOne({
+    userId,
+    recipeId,
+  });
+
+  if (existingFavourite) {
+    await FavouriteCollection.deleteOne({ _id: existingFavourite._id });
+    return { isFavourite: false };
+  } else {
+    await FavouriteCollection.create({ userId, recipeId });
+    return { isFavourite: true };
+  }
+};
+
+export const updateRecipe = async (
+  recipeId,
+  recipeData,
+  userId,
+  options = {},
+) => {
+  const result = await RecipesCollection.findOneAndUpdate(
+    { _id: recipeId, userId },
+    recipeData,
+    {
+      new: true,
+      runValidators: true, // Ensures that the update adheres to the schema
+      includeResultMetadata: true,
+      ...options,
+    },
+  );
+
+  if (!result || !result.value) return null;
+
+  return {
+    recipe: result.value,
+    isNew: Boolean(result?.lastErrorObject?.upserted),
+  };
+};
