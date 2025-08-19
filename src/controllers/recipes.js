@@ -14,7 +14,7 @@ import {
   createRecipe,
   deleteRecipe,
   toggleFavouriteRecipe,
-  updateRecipe,
+  //updateRecipe,
 } from '../services/recipes.js';
 
 export const getRecipesController = async (req, res) => {
@@ -139,37 +139,37 @@ export const toggleFavouriteRecipeController = async (req, res, next) => {
   });
 };
 
-export const updateRecipeController = async (req, res, next) => {
-  const { recipeId } = req.params;
-  const photo = req.file;
+// export const updateRecipeController = async (req, res, next) => {
+//   const { recipeId } = req.params;
+//   const photo = req.file;
 
-  let photoUrl;
+//   let photoUrl;
 
-  if (photo) {
-    if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
-      photoUrl = await saveFileToCloudinary(photo);
-    } else {
-      photoUrl = await saveFileToUploadDir(photo);
-    }
-  }
+//   if (photo) {
+//     if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+//       photoUrl = await saveFileToCloudinary(photo);
+//     } else {
+//       photoUrl = await saveFileToUploadDir(photo);
+//     }
+//   }
 
-  const result = await updateRecipe(
-    recipeId,
-    {
-      ...req.body,
-      photo: photoUrl,
-    },
-    req.user._id,
-  );
+//   const result = await updateRecipe(
+//     recipeId,
+//     {
+//       ...req.body,
+//       photo: photoUrl,
+//     },
+//     req.user._id,
+//   );
 
-  if (!result) {
-    next(createHttpError(404, 'Recipe not found'));
-    return;
-  }
+//   if (!result) {
+//     next(createHttpError(404, 'Recipe not found'));
+//     return;
+//   }
 
-  res.json({
-    status: 200,
-    message: `Successfully edited recipe with id ${recipeId}!`,
-    data: result,
-  });
-};
+//   res.json({
+//     status: 200,
+//     message: `Successfully edited recipe with id ${recipeId}!`,
+//     data: result,
+//   });
+// };

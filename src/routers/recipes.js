@@ -20,19 +20,6 @@ import {
 
 const router = Router();
 
-// routes: post recipe // auth
-// 		delete recipe // auth
-// 		favourite recipe (patch) // auth
-// 		edit recipe (not in docs) // auth
-// 		get recipes (all of them)
-// 		get recipe (single) // auth
-// 		get filtered recipes
-// 		filters: search query
-// 				 category
-// 				 ingredient (single)
-// 				 favourited // auth
-// 				 user-created // auth
-
 router.get('/', ctrlWrapper(getRecipesController));
 
 router.get('/mine', authenticate, ctrlWrapper(getMyRecipesController));
@@ -43,12 +30,7 @@ router.get(
   ctrlWrapper(getFavouriteRecipesController),
 );
 
-router.get(
-  '/:id',
-  authenticate,
-  isValidId,
-  ctrlWrapper(getRecipeByIdController),
-);
+router.get('/:id', isValidId, ctrlWrapper(getRecipeByIdController));
 
 router.post(
   '/',

@@ -1,5 +1,6 @@
-import { RecipesCollection } from '../db/models/recipe';
+import { RecipesCollection } from '../db/models/recipe.js';
 import { FavouriteCollection } from '../db/models/favourite.js';
+import { FavRecycleBinCollection } from '../db/models/favRecycleBin.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
 export const getRecipes = async ({
@@ -23,38 +24,50 @@ export const getRecipes = async ({
     searchFilter.name = { $regex: filter.name, $options: 'i' };
   }
   if (filter.category) {
-    searchFilter.category = filter.category;
+    searchFilter.category = { $regex: filter.category, $options: 'i' };
   }
   if (filter.ingredients && filter.ingredients.length > 0) {
     searchFilter.ingredients = { $in: filter.ingredients };
   }
   if (filter.favourite) {
-    const [{ recipes, recipesCount }] = await FavouriteCollection.aggregate([
-      { $match: { userId } },
-      {
-        $lookup: {
-          from: 'recipes',
-          localField: 'recipeId',
-          foreignField: '_id',
-          as: 'recipe',
-        },
-      },
-      { $unwind: '$recipe' },
-      { $replaceRoot: { newRoot: '$recipe' } },
-      { $match: searchFilter },
-      {
-        $facet: {
-          recipes: [{ $skip: skip }, { $limit: limit }],
-          recipesCount: [{ $count: 'count' }],
-        },
-      },
+    // const [{ recipes, recipesCount }] = await FavouriteCollection.aggregate([
+    //   { $match: { userId } },
+    //   {
+    //     $lookup: {
+    //       from: 'recipes',
+    //       localField: 'recipeId',
+    //       foreignField: '_id',
+    //       as: 'recipe',
+    //     },
+    //   },
+    //   { $unwind: '$recipe' },
+    //   { $replaceRoot: { newRoot: '$recipe' } },
+    //   { $match: searchFilter },
+    //   {
+    //     $facet: {
+    //       recipes: [{ $skip: skip }, { $limit: limit }],
+    //       recipesCount: [{ $count: 'count' }],
+    //     },
+    //   },
+    // ]);
+
+    // const paginationData = calculatePaginationData(
+    //   recipesCount[0]?.count || 0,
+    //   perPage,
+    //   page,
+    // );
+
+    const [recipesCount, recipes] = await Promise.All([
+      FavouriteCollection.countDocuments({ userId }),
+      FavouriteCollection.find({ userId })
+        .populate('recipeId')
+        .populate('delRecipeId')
+        .find(searchFilter)
+        .skip(skip)
+        .limit(limit),
     ]);
 
-    const paginationData = calculatePaginationData(
-      recipesCount[0]?.count || 0,
-      perPage,
-      page,
-    );
+    const paginationData = calculatePaginationData(recipesCount, perPage, page);
 
     return {
       data: recipes,
@@ -90,6 +103,22 @@ export const deleteRecipe = async (recipeId, userId) => {
     _id: recipeId,
     userId,
   });
+
+  if (recipe) {
+    await FavouriteCollection.deleteMany({ recipeId });
+    const deleted = await FavRecycleBinCollection.create({
+      name: recipe.name,
+      photo: recipe.photo,
+      description: recipe.description,
+      cookingTime: recipe.cookingTime,
+      foodEnergy: recipe.foodEnergy,
+    });
+    await FavouriteCollection.updateMany(
+      { recipeId: recipe._id },
+      { $set: { recipeId: null, delRecipeId: deleted._id } },
+    );
+  }
+
   return recipe;
 };
 
@@ -114,27 +143,27 @@ export const toggleFavouriteRecipe = async (recipeId, userId) => {
   }
 };
 
-export const updateRecipe = async (
-  recipeId,
-  recipeData,
-  userId,
-  options = {},
-) => {
-  const result = await RecipesCollection.findOneAndUpdate(
-    { _id: recipeId, userId },
-    recipeData,
-    {
-      new: true,
-      runValidators: true, // Ensures that the update adheres to the schema
-      includeResultMetadata: true,
-      ...options,
-    },
-  );
+// export const updateRecipe = async (
+//   recipeId,
+//   recipeData,
+//   userId,
+//   options = {},
+// ) => {
+//   const result = await RecipesCollection.findOneAndUpdate(
+//     { _id: recipeId, userId },
+//     recipeData,
+//     {
+//       new: true,
+//       runValidators: true, // Ensures that the update adheres to the schema
+//       includeResultMetadata: true,
+//       ...options,
+//     },
+//   );
 
-  if (!result || !result.value) return null;
+//   if (!result || !result.value) return null;
 
-  return {
-    recipe: result.value,
-    isNew: Boolean(result?.lastErrorObject?.upserted),
-  };
-};
+//   return {
+//     recipe: result.value,
+//     isNew: Boolean(result?.lastErrorObject?.upserted),
+//   };
+// };

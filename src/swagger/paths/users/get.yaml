@@ -1,0 +1,31 @@
+tags:
+  - User
+summary: Get user data
+operationId: getUserData
+description: 'Retrieve the authenticated user data'
+security:
+  - bearerAuth: []
+responses:
+  '200':
+    description: Successfully retrieved user data!
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'User data retrieved successfully'
+            data:
+              $ref: '#/components/schemas/user.yaml'
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '500':
+    $ref: '../../../components/responses/500.yaml'

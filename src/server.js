@@ -35,9 +35,9 @@ export const startServer = () => {
   app.use('/uploads', express.static(UPLOAD_DIR));
   app.use('/api-docs', swaggerDocs());
 
-  app.use(indexRouter);
+  app.use('/api', indexRouter);
 
-  app.use('*', notFoundHandler);
+  app.use(notFoundHandler);
 
   app.use(errorHandler);
 

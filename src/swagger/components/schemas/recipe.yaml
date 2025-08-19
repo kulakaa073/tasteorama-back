@@ -1,0 +1,59 @@
+type: object
+required: -_id
+  -name
+  -ingredients
+  -instructions
+  -info
+  -category
+properties:
+  _id:
+    description: "Recipe's unique identifier"
+    type: string
+    example: 65e4decdd286b30065d54af9
+  userId:
+    description: 'ID of the user who created the recipe'
+    type: string
+    example: 65e4decdd286b30065d54af9
+  name:
+    description: 'Name of the recipe'
+    type: string
+    example: 'Spaghetti Carbonara'
+  photo:
+    description: 'URL of the recipe photo'
+    type: string
+    format: uri
+    example: 'https://example.com/photo.jpg'
+  ingredients:
+    description: 'List of ingredients required for the recipe'
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          description: 'Name of the ingredient'
+          type: string
+          example: 'Spaghetti'
+        quantity:
+          description: 'Quantity of the ingredient'
+          type: number
+          example: 200
+  instructions:
+    type: string
+    description: 'Step-by-step instructions to prepare the recipe'
+    example: 'Cook spaghetti, mix with eggs and cheese, add bacon and pepper.'
+  info:
+    description: 'Additional information about the recipe'
+    type: object
+    properties:
+      category:
+        description: 'Category of the recipe (e.g., main course, dessert)'
+        type: string
+        example: 'main course'
+      cookingTime:
+        description: 'Estimated cooking time in minutes'
+        type: integer
+        example: 30
+      foodEnergy:
+        description: 'Estimated food energy in kcal'
+        type: number
+        example: 600

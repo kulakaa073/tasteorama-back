@@ -1,0 +1,87 @@
+tags:
+  - Recipes
+summary: Create recipe
+operationId: createRecipe
+description: 'Create a new recipe'
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        required:
+          - name
+          - ingredients
+          - instructions
+          - info
+        properties:
+          name:
+            type: string
+            description: 'Name of the recipe'
+            example: 'Spaghetti Carbonara'
+          photo:
+            description: "Recipe's photo image file"
+            type: string
+            format: binary
+          ingredients:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Name of the ingredient'
+                  example: 'Spaghetti'
+                quantity:
+                  type: number
+                  description: 'Quantity of the ingredient'
+                  example: 200
+          instructions:
+            type: string
+            description: 'Step-by-step instructions to prepare the recipe'
+            example: 'Cook spaghetti, mix with eggs and cheese, add bacon and pepper.'
+          info:
+            type: object
+            properties:
+              category:
+                type: string
+                description: 'Category of the recipe (e.g., main course, dessert)'
+                example: 'main course'
+              cookingTime:
+                type: integer
+                description: 'Estimated cooking time in minutes'
+                example: 30
+              foodEnergy:
+                type: number
+                description: 'Estimated food energy in kcal'
+                example: 600
+responses:
+  '201':
+    description: Recipe created successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: 'Recipe created successfully'
+            data:
+              type: object
+              $ref: '#/components/schemas/recipe.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '400':
+    $ref: '../../components/responses/400.yaml'
+  '404':
+    $ref: '../../components/responses/404.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

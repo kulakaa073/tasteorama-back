@@ -1,0 +1,29 @@
+tags:
+  - Ingredients
+summary: Get ingredients
+operationId: getIngredients
+description: 'Retrieve a list of ingredients with optional filtering and pagination'
+responses:
+  '200':
+    description: Successfully retrieved ingredients!
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Ingredients retrieved successfully'
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/ingredient.yaml'
+  '500':
+    $ref: '../../../components/responses/500.yaml'

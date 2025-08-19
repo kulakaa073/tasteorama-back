@@ -1,0 +1,16 @@
+tags:
+  - Recipes
+summary: Update recipe favourite status
+operationId: updateRecipeFavourite
+description: 'Update the favourite status of a recipe'
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    description: 'Unique identifier of the recipe'
+    schema:
+      type: string
+      example: '65e4decdd286b30065d54af9'
+requestBody:

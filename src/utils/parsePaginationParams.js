@@ -1,4 +1,4 @@
-import { parseNumber } from './parseHelpers';
+import { parseNumber } from './parseHelpers.js';
 
 export const parsePaginationParams = (query) => {
   const { page, perPage } = query;
