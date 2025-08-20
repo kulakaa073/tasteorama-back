@@ -80,8 +80,9 @@ export const getRecipes = async ({
     };
   }
 
-  const [recipesCount, recipes] = await Promise.All([
-    RecipesCollection.countDocument(searchFilter),
+  console.log('searchFilter', searchFilter);
+  const [recipesCount, recipes] = await Promise.all([
+    RecipesCollection.countDocuments(searchFilter),
     RecipesCollection.find(searchFilter).skip(skip).limit(limit),
   ]);
 

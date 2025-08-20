@@ -1,5 +1,4 @@
 import Joi from 'joi';
-import { ingredientSchema } from './ingredient.js';
 
 export const createRecipeSchema = Joi.object({
   name: Joi.string().max(64).required().messages({
@@ -12,25 +11,21 @@ export const createRecipeSchema = Joi.object({
     'string.base': 'Description must be a string',
     'string.max': 'Description should have at most {#limit} characters',
   }),
-  ingredients: Joi.alternatives()
-    .try(
-      Joi.array().items(ingredientSchema).min(2).max(16),
-      Joi.string().custom((value, helper) => {
-        try {
-          const arr = JSON.parse(value);
-          if (!Array.isArray(arr)) throw new Error();
-          const { error } = Joi.array()
-            .items(ingredientSchema)
-            .min(2)
-            .max(16)
-            .validate(arr);
-          if (error) return helper.message(error.message);
-          return arr;
-        } catch {
-          return helper.message('Ingredients must be a valid JSON array');
-        }
+  ingredients: Joi.array()
+    .items(
+      Joi.object({
+        name: Joi.string().messages({
+          'string.base': 'Ingredient name must be a string',
+          'any.required': 'Ingredient name is required',
+        }),
+        quantity: Joi.string().messages({
+          'string.base': 'Ingredient quantity must be a string',
+          'any.required': 'Ingredient quantity is required',
+        }),
       }),
     )
+    .min(2)
+    .max(16)
     .required()
     .messages({
       'array.base': 'Ingredients must be an array',

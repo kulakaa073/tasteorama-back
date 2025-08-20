@@ -14,6 +14,7 @@ export const parseRecipeIngredient = async (ingredient) => {
   const validIngredient = await IngredientsCollection.findOne({
     name: ingredient.trim(),
   });
+
   return validIngredient ? validIngredient._id : undefined;
 };
 

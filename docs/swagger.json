@@ -551,22 +551,9 @@
                     "format": "binary"
                   },
                   "ingredients": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "type": "string",
-                          "description": "Name of the ingredient",
-                          "example": "Spaghetti"
-                        },
-                        "quantity": {
-                          "type": "string",
-                          "description": "Quantity of the ingredient",
-                          "example": "200g"
-                        }
-                      }
-                    }
+                    "type": "string",
+                    "description": "List of ingredients in JSON format",
+                    "example": "[{\"name\": \"Noodles\", \"quantity\": \"200g\"}, {\"name\": \"Paprika\", \"quantity\": \"2\"}]"
                   },
                   "description": {
                     "description": "Detailed description of the recipe",
@@ -581,7 +568,7 @@
                   "category": {
                     "type": "string",
                     "description": "Category of the recipe (e.g., main course, dessert)",
-                    "example": "main course"
+                    "example": "Seafood"
                   },
                   "cookingTime": {
                     "type": "integer",

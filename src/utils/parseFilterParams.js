@@ -2,7 +2,7 @@ import { parseRecipeCategory, parseRecipeIngredient } from './parseHelpers.js';
 
 // TODO
 // add energy and time filtering
-export const parseFilterParams = (query) => {
+export const parseFilterParams = async (query) => {
   const { name, category, ingredient } = query;
   const filter = {};
 
@@ -10,12 +10,12 @@ export const parseFilterParams = (query) => {
     filter.name = name.trim();
   }
 
-  const parsedCategory = parseRecipeCategory(category);
+  const parsedCategory = await parseRecipeCategory(category);
   if (parsedCategory) {
     filter.category = parsedCategory;
   }
 
-  const parsedIngredient = parseRecipeIngredient(ingredient);
+  const parsedIngredient = await parseRecipeIngredient(ingredient);
   if (parsedIngredient) {
     filter.ingredients = parsedIngredient;
   }

@@ -18,6 +18,8 @@ import {
   //updateRecipeController,
 } from '../controllers/recipes.js';
 
+import { parseFormDataArrays } from '../middlewares/parseFormDataArray.js';
+
 const router = Router();
 
 router.get('/', ctrlWrapper(getRecipesController));
@@ -36,6 +38,7 @@ router.post(
   '/',
   authenticate,
   upload.single('photo'),
+  parseFormDataArrays,
   validateBody(createRecipeSchema),
   ctrlWrapper(createRecipeController),
 );

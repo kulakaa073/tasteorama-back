@@ -9,7 +9,7 @@ const recipeSchema = new Schema(
     ingredients: {
       type: [
         {
-          name: {
+          ingredientId: {
             type: Schema.Types.ObjectId,
             ref: 'ingredients',
           },
@@ -19,7 +19,7 @@ const recipeSchema = new Schema(
       required: true,
     },
     instructions: { type: String, required: true },
-    category: {
+    categoryId: {
       type: Schema.Types.ObjectId,
       ref: 'categories',
       required: true,

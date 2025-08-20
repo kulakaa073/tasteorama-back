@@ -16,11 +16,15 @@ import {
   toggleFavouriteRecipe,
   //updateRecipe,
 } from '../services/recipes.js';
+import {
+  parseRecipeCategory,
+  parseRecipeIngredient,
+} from '../utils/parseHelpers.js';
 
 export const getRecipesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   //const { sortBy, sortOrder } = parseSortParams(req.query);
-  const filter = parseFilterParams(req.query);
+  const filter = await parseFilterParams(req.query);
   const recipes = await getRecipes({
     page,
     perPage,
@@ -37,7 +41,7 @@ export const getRecipesController = async (req, res) => {
 
 export const getMyRecipesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
-  const filter = parseFilterParams(req.query);
+  const filter = await parseFilterParams(req.query);
   const recipes = await getRecipes({
     page,
     perPage,
@@ -54,7 +58,7 @@ export const getMyRecipesController = async (req, res) => {
 
 export const getFavouriteRecipesController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
-  const filter = parseFilterParams(req.query);
+  const filter = await parseFilterParams(req.query);
   filter.favourite = true;
   const recipes = await getRecipes({
     page,
@@ -96,9 +100,34 @@ export const createRecipeController = async (req, res) => {
     }
   }
 
+  let ingredients;
+  if (Array.isArray(req.body.ingredients)) {
+    ingredients = await Promise.all(
+      req.body.ingredients.map(async (ing) => {
+        const ingredientId = await parseRecipeIngredient(ing.name);
+        if (!ingredientId) return undefined;
+        return { ingredientId, quantity: ing.quantity };
+      }),
+    );
+
+    if (!ingredients || ingredients.includes(undefined)) {
+      return res.status(400).json({ message: 'Invalid ingredients format' });
+    }
+  }
+
+  let category;
+  if (req.body.category && typeof req.body.category === 'string') {
+    category = await parseRecipeCategory(req.body.category);
+    if (!category) {
+      return res.status(400).json({ message: 'Invalid category format' });
+    }
+  }
+
   const recipe = await createRecipe({
     ...req.body,
     photo: photoUrl,
+    ingredients,
+    categoryId: category,
     userId: req.user._id,
   });
 
