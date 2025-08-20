@@ -1,5 +1,4 @@
-import { parseRecipeCategory } from './parseHelpers';
-import { parseRecipeIngredient } from './parseHelpers';
+import { parseRecipeCategory, parseRecipeIngredient } from './parseHelpers';
 
 // TODO
 // add energy and time filtering

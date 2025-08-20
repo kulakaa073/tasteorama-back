@@ -30,76 +30,49 @@ export const getRecipes = async ({
     searchFilter.ingredients = { $in: filter.ingredients };
   }
   if (filter.favourite) {
-    // const [{ recipes, recipesCount }] = await FavouriteCollection.aggregate([
-    //   { $match: { userId } },
-    //   {
-    //     $lookup: {
-    //       from: 'recipes',
-    //       localField: 'recipeId',
-    //       foreignField: '_id',
-    //       as: 'recipe',
-    //     },
-    //   },
-    //   { $unwind: '$recipe' },
-    //   { $replaceRoot: { newRoot: '$recipe' } },
-    //   { $match: searchFilter },
-    //   {
-    //     $facet: {
-    //       recipes: [{ $skip: skip }, { $limit: limit }],
-    //       recipesCount: [{ $count: 'count' }],
-    //     },
-    //   },
-    // ]);
-
-    // const paginationData = calculatePaginationData(
-    //   recipesCount[0]?.count || 0,
-    //   perPage,
-    //   page,
-    // );
-
-    const [recipesCount, recipes] = await Promise.All([
-      FavouriteCollection.aggregate([
-        { $match: { userId } }, // step 1: favourites by user
-        {
-          $lookup: {
-            from: 'recipes',
-            localField: 'recipeId',
-            foreignField: '_id',
-            as: 'recipe',
-          },
+    const [{ recipes, recipesCount }] = await FavouriteCollection.aggregate([
+      { $match: { userId } },
+      {
+        $lookup: {
+          from: 'recipes',
+          localField: 'recipeId',
+          foreignField: '_id',
+          as: 'recipe',
         },
-        {
-          $lookup: {
-            from: 'favrecyclebins',
-            localField: 'delRecipeId',
-            foreignField: '_id',
-            as: 'delRecipe',
-          },
+      },
+      {
+        $lookup: {
+          from: 'favrecyclebins',
+          localField: 'delRecipeId',
+          foreignField: '_id',
+          as: 'delRecipe',
         },
-        {
-          $match: {
-            $or: [
-              { recipe: { $elemMatch: searchFilter } },
-              { delRecipe: { $elemMatch: searchFilter } },
-            ],
-          },
+      },
+      { $unwind: { path: '$recipe', preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: '$delRecipe', preserveNullAndEmptyArrays: true } },
+      {
+        $match: {
+          $or: [{ recipe: searchFilter }, { delRecipe: searchFilter }],
         },
-        { $count: 'count' },
-      ]).then((r) => r[0]?.count ?? 0),
-      FavouriteCollection.find({ userId })
-        .populate({
-          path: 'recipeId',
-          match: searchFilter,
-        })
-        .populate({
-          path: 'delRecipeId',
-          match: searchFilter,
-        })
-        .skip(skip)
-        .limit(limit),
+      },
+      {
+        $addFields: {
+          recipeData: { $ifNull: ['$recipe', '$delRecipe'] },
+        },
+      },
+      { $replaceRoot: { newRoot: '$recipeData' } },
+      {
+        $facet: {
+          recipes: [{ $skip: skip }, { $limit: limit }],
+          recipesCount: [{ $count: 'count' }],
+        },
+      },
     ]);
-
-    const paginationData = calculatePaginationData(recipesCount, perPage, page);
+    const paginationData = calculatePaginationData(
+      recipesCount[0]?.count || 0,
+      perPage,
+      page,
+    );
 
     return {
       data: recipes,
@@ -144,6 +117,7 @@ export const deleteRecipe = async (recipeId, userId) => {
       description: recipe.description,
       cookingTime: recipe.cookingTime,
       foodEnergy: recipe.foodEnergy,
+      deleted: true,
     });
     await FavouriteCollection.updateMany(
       { recipeId: recipe._id },

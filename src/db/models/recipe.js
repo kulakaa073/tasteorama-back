@@ -1,4 +1,3 @@
-import { ref } from 'joi';
 import { Schema, model } from 'mongoose';
 
 // userId: objectId - reference to users collection
