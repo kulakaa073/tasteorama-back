@@ -1,5 +1,5 @@
-import { IngredientsCollection } from '../db/models/ingredients';
-import { CategoriesCollection } from '../db/models/categories';
+import { IngredientsCollection } from '../db/models/ingredients.js';
+import { CategoriesCollection } from '../db/models/categories.js';
 
 export const parseRecipeCategory = async (category) => {
   if (typeof category !== 'string') return;

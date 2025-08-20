@@ -76,7 +76,7 @@ responses:
               example: 'Recipe created successfully'
             data:
               type: object
-              $ref: '#/components/schemas/recipe.yaml'
+              $ref: '../../components/schemas/recipe.yaml'
   '401':
     $ref: '../../components/responses/401.yaml'
   '400':

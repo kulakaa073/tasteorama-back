@@ -7,46 +7,75 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: This is a sample server for a contacts API.
 tags:
-  - name: Contacts
+  - name: Recipes
     description: Operations about students.
   - name: Auth
     description: Auth operations.
+  - name: User
+    description: User operations.
+  - name: Ingredients
+    description: Ingredient operations.
+  - name: Categories
+    description: Category operations.
 servers:
   - url: http://localhost:3000
-  - url: https://nodejs-hw-mongodb-contacts-7895.onrender.com
+  - url: https://api.example.com
 paths:
-  /auth/register:
+  /api/auth/register:
     post:
       $ref: ../swagger/paths/auth/register/post.yaml
-  /auth/login:
+  /api/auth/login:
     post:
       $ref: ../swagger/paths/auth/login/post.yaml
-  /auth/logout:
+  /api/auth/logout:
     post:
       $ref: ../swagger/paths/auth/logout/post.yaml
-  /auth/refresh:
+  /api/auth/refresh:
     post:
       $ref: ../swagger/paths/auth/refresh/post.yaml
-  /auth/send-reset-email:
-    post:
-      $ref: ../swagger/paths/auth/send-reset-email/post.yaml
-  /auth/reset-pwd:
-    post:
-      $ref: ../swagger/paths/auth/reset-pwd/post.yaml
-  /contacts:
+  /api/recipes:
     get:
-      $ref: ../swagger/paths/contacts/get.yaml
+      $ref: ../swagger/paths/recipes/get.yaml
     post:
-      $ref: ../swagger/paths/contacts/post.yaml
-  /contacts/{id}:
+      $ref: ../swagger/paths/recipes/post.yaml
+  /api/recipes/{id}:
     get:
-      $ref: ../swagger/paths/contacts/{id}/get.yaml
-    patch:
-      $ref: ../swagger/paths/contacts/{id}/path.yaml
+      $ref: ../swagger/paths/recipes/{id}/get.yaml
     delete:
-      $ref: ../swagger/paths/contacts/{id}/delete.yaml
+      $ref: ../swagger/paths/recipes/{id}/delete.yaml
+  /api/recipes/{id}/favourite:
+    patch:
+      $ref: ../swagger/paths/recipes/{id}/favourite/patch.yaml
+  /api/recipes/favourites:
+    patch:
+      $ref: ../swagger/paths/recipes/favourites/get.yaml
+  /api/recipes/mine:
+    get:
+      $ref: ../swagger/paths/recipes/mine/get.yaml
+  /api/categories:
+    get:
+      $ref: ../swagger/paths/categories/get.yaml
+  /api/ingredients:
+    get:
+      $ref: ../swagger/paths/ingredients/get.yaml
+  /api/user/me:
+    get:
+      $ref: ../swagger/paths/users/me/get.yaml
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
+  schemas:
+    recipe:
+      $ref: ../swagger/components/schemas/recipe.yaml
+    favRecycleBin:
+      $ref: ../swagger/components/schemas/favRecycleBin.yaml
+    user:
+      $ref: ../swagger/components/schemas/user.yaml
+    ingredient:
+      $ref: ../swagger/components/schemas/ingredient.yaml
+    category:
+      $ref: ../swagger/components/schemas/category.yaml
+    session:
+      $ref: ../swagger/components/schemas/session.yaml

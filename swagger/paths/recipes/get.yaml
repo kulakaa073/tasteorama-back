@@ -3,6 +3,7 @@ tags:
 summary: Get recipes
 operationId: getRecipes
 description: 'Retrieve a list of recipes with optional filtering and pagination'
+security: []
 parameters:
   - in: query
     name: name
@@ -70,10 +71,10 @@ responses:
                 - hasNextPage
                 - hasPreviousPage
               properties:
-                recipes:
+                data:
                   type: array
                   items:
-                    $ref: '../../../components/schemas/recipe.yaml'
+                    $ref: ../../components/schemas/recipe.yaml
                 page:
                   type: integer
                   example: 1
@@ -86,7 +87,13 @@ responses:
                 totalItems:
                   type: integer
                   example: 50
+                hasNextPage:
+                  type: boolean
+                  example: true
+                hasPreviousPage:
+                  type: boolean
+                  example: false
   '400':
-    $ref: '../../../components/responses/400.yaml'
+    $ref: ../../components/responses/400.yaml
   '500':
-    $ref: '../../../components/responses/500.yaml'
+    $ref: ../../components/responses/500.yaml

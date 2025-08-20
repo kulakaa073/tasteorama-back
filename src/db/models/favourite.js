@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { favBinCleanup } from '../../middlewares/favBinCleanup';
+import { favBinCleanup } from '../../middlewares/favBinCleanup.js';
 
 const favouriteSchema = new Schema(
   {

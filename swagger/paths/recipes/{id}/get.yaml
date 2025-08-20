@@ -3,6 +3,7 @@ tags:
 summary: Get recipe by id
 operationId: getRecipesById
 description: 'Retrieve a recipe by its unique identifier'
+security: []
 parameters:
   - in: path
     name: id
@@ -30,7 +31,7 @@ responses:
               type: string
               example: 'Recipe found successfully'
             data:
-              $ref: '#/components/schemas/recipe.yaml'
+              $ref: '../../../components/schemas/recipe.yaml'
   '401':
     $ref: '../../../components/responses/401.yaml'
   '400':

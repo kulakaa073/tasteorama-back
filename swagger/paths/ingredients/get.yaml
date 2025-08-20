@@ -3,6 +3,7 @@ tags:
 summary: Get ingredients
 operationId: getIngredients
 description: 'Retrieve a list of ingredients with optional filtering and pagination'
+security: []
 responses:
   '200':
     description: Successfully retrieved ingredients!
@@ -24,6 +25,8 @@ responses:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/ingredient.yaml'
+                $ref: ../../components/schemas/recipe.yaml
+  '400':
+    $ref: '../../components/responses/400.yaml'
   '500':
-    $ref: '../../../components/responses/500.yaml'
+    $ref: '../../components/responses/500.yaml'

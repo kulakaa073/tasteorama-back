@@ -1,12 +1,13 @@
 type: object
-required: -_id
-  -userId
-  -name
-  -description
-  -ingredients
-  -instructions
-  -category
-  -cookingTime
+required:
+  - _id
+  - userId
+  - name
+  - description
+  - ingredients
+  - instructions
+  - category
+  - cookingTime
 properties:
   _id:
     description: "Recipe's unique identifier"

@@ -61,33 +61,39 @@ responses:
             message:
               type: string
               example: 'User recipes found successfully'
-              data:
-                type: object
-                required:
-                  - data
-                  - page
-                  - perPage
-                  - totalItems
-                  - totalPages
-                  - hasNextPage
-                  - hasPreviousPage
-                properties:
-                  recipes:
-                    type: array
-                    items:
-                      $ref: '../../../components/schemas/recipe.yaml'
-                  page:
-                    type: integer
-                    example: 1
-                  perPage:
-                    type: integer
-                    example: 10
-                  totalPages:
-                    type: integer
-                    example: 5
-                  totalItems:
-                    type: integer
-                    example: 50
+            data:
+              type: object
+              required:
+                - data
+                - page
+                - perPage
+                - totalItems
+                - totalPages
+                - hasNextPage
+                - hasPreviousPage
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../../../components/schemas/recipe.yaml'
+                page:
+                  type: integer
+                  example: 1
+                perPage:
+                  type: integer
+                  example: 10
+                totalPages:
+                  type: integer
+                  example: 5s
+                totalItems:
+                  type: integer
+                  example: 50
+                hasNextPage:
+                  type: boolean
+                  example: true
+                hasPreviousPage:
+                  type: boolean
+                  example: false
   '401':
     $ref: '../../../components/responses/401.yaml'
   '400':

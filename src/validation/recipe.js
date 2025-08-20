@@ -45,12 +45,14 @@ export const createRecipeSchema = Joi.object({
     'any.required': 'Instructions are required',
     'string.max': 'Instructions should have at most {#limit} characters',
   }),
-  category: Joi.string().required.custom((value, helper) => {
-    if (value && !isValidObjectId(value)) {
-      return helper.message('User id should be a valid mongo id');
-    }
-    return true;
-  }),
+  category: Joi.string()
+    .required()
+    .custom((value, helper) => {
+      if (value && !isValidObjectId(value)) {
+        return helper.message('User id should be a valid mongo id');
+      }
+      return true;
+    }),
   cookingTime: Joi.string().min(1).max(360).required().messages({
     'string.base': 'Cooking time must be a string',
     'any.required': 'Cooking time is required',

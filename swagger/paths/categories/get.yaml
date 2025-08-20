@@ -3,6 +3,7 @@ tags:
 summary: Get categories
 operationId: getCategories
 description: 'Retrieve a list of categories with optional filtering and pagination'
+security: []
 responses:
   '200':
     description: Successfully retrieved categories!
@@ -24,6 +25,8 @@ responses:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/category.yaml'
+                $ref: '../../components/schemas/category.yaml'
+  '400':
+    $ref: '../../components/responses/400.yaml'
   '500':
-    $ref: '../../../components/responses/500.yaml'
+    $ref: '../../components/responses/500.yaml'

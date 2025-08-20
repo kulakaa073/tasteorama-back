@@ -32,12 +32,12 @@ responses:
               type: string
               example: 'Recipe favourite status updated successfully'
             data:
-              $ref: '#/components/schemas/recipe.yaml'
+              $ref: ../../../../components/schemas/recipe.yaml
   '401':
-    $ref: '../../components/responses/401.yaml'
+    $ref: '../../../../components/responses/401.yaml'
   '400':
-    $ref: '../../components/responses/400.yaml'
+    $ref: '../../../../components/responses/400.yaml'
   '404':
-    $ref: '../../components/responses/404.yaml'
+    $ref: '../../../../components/responses/404.yaml'
   '500':
-    $ref: '../../components/responses/500.yaml'
+    $ref: '../../../../components/responses/500.yaml'
