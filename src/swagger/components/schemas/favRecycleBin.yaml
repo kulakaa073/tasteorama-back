@@ -1,19 +1,12 @@
 type: object
 required: -_id
-  -userId
   -name
   -description
-  -ingredients
-  -instructions
-  -category
   -cookingTime
+  -category
 properties:
   _id:
     description: "Recipe's unique identifier"
-    type: string
-    example: 65e4decdd286b30065d54af9
-  userId:
-    description: 'ID of the user who created the recipe'
     type: string
     example: 65e4decdd286b30065d54af9
   name:
@@ -29,24 +22,6 @@ properties:
     description: 'Detailed description of the recipe'
     type: string
     example: 'A classic Italian pasta dish made with eggs, cheese, pancetta, and pepper.'
-  ingredients:
-    description: 'List of ingredients required for the recipe'
-    type: array
-    items:
-      type: object
-      properties:
-        ingredient:
-          description: 'ID of the ingredient'
-          type: string
-          example: '65e4decdd286b30065d54af9'
-        quantity:
-          description: 'Quantity of the ingredient'
-          type: string
-          example: '200g'
-  instructions:
-    type: string
-    description: 'Step-by-step instructions to prepare the recipe'
-    example: 'Cook spaghetti, mix with eggs and cheese, add bacon and pepper.'
   category:
     description: 'ID of the category of the recipe '
     type: string
@@ -59,3 +34,7 @@ properties:
     description: 'Estimated food energy in kcal'
     type: number
     example: 600
+  deleted:
+    description: 'Indicates whether the recipe is deleted'
+    type: boolean
+    example: true

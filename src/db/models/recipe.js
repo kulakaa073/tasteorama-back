@@ -1,17 +1,5 @@
 import { Schema, model } from 'mongoose';
 
-// userId: objectId - reference to users collection
-// name: string
-// photo: file
-// description: string
-// learn more link: string - frontend only
-// favourite: boolean
-// ingredients: array of objects
-// ingredients: [{ name: string, quantity: string }]
-// instructions: string
-// info: object
-// info: {category: string, cooking time: string, food energy: number}
-
 const recipeSchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'users', required: true },

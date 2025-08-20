@@ -1,0 +1,23 @@
+type: object
+required:
+  - _id
+  - userId
+  - recipeId
+  - delRecipeId
+properties:
+  _id:
+    description: "Recipe's unique identifier"
+    type: string
+    example: 65e4decdd286b30065d54af9
+  userId:
+    description: 'ID of the user who favourited the recipe'
+    type: string
+    example: 65e4decdd286b30065d54af9
+  recipeId:
+    description: 'ID of the favourited recipe'
+    type: string
+    example: 65e4decdd286b30065d54af9
+  delRecipeId:
+    description: 'ID of the favourited recipe if it was deleted'
+    type: string
+    example: 65e4decdd286b30065d54af9
