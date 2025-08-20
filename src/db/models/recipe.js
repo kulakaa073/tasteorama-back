@@ -1,3 +1,4 @@
+import { ref } from 'joi';
 import { Schema, model } from 'mongoose';
 
 // userId: objectId - reference to users collection
@@ -31,7 +32,11 @@ const recipeSchema = new Schema(
       required: true,
     },
     instructions: { type: String, required: true },
-    category: { type: String, required: true },
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: 'categories',
+      required: true,
+    },
     cookingTime: { type: Number, required: true },
     foodEnergy: { type: Number },
   },

@@ -58,11 +58,43 @@ export const getRecipes = async ({
     // );
 
     const [recipesCount, recipes] = await Promise.All([
-      FavouriteCollection.countDocuments({ userId }),
+      FavouriteCollection.aggregate([
+        { $match: { userId } }, // step 1: favourites by user
+        {
+          $lookup: {
+            from: 'recipes',
+            localField: 'recipeId',
+            foreignField: '_id',
+            as: 'recipe',
+          },
+        },
+        {
+          $lookup: {
+            from: 'favrecyclebins',
+            localField: 'delRecipeId',
+            foreignField: '_id',
+            as: 'delRecipe',
+          },
+        },
+        {
+          $match: {
+            $or: [
+              { recipe: { $elemMatch: searchFilter } },
+              { delRecipe: { $elemMatch: searchFilter } },
+            ],
+          },
+        },
+        { $count: 'count' },
+      ]).then((r) => r[0]?.count ?? 0),
       FavouriteCollection.find({ userId })
-        .populate('recipeId')
-        .populate('delRecipeId')
-        .find(searchFilter)
+        .populate({
+          path: 'recipeId',
+          match: searchFilter,
+        })
+        .populate({
+          path: 'delRecipeId',
+          match: searchFilter,
+        })
         .skip(skip)
         .limit(limit),
     ]);
