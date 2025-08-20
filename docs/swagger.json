@@ -537,7 +537,7 @@
                   "name",
                   "ingredients",
                   "instructions",
-                  "info"
+                  "description"
                 ],
                 "properties": {
                   "name": {
@@ -561,37 +561,37 @@
                           "example": "Spaghetti"
                         },
                         "quantity": {
-                          "type": "number",
+                          "type": "string",
                           "description": "Quantity of the ingredient",
-                          "example": 200
+                          "example": "200g"
                         }
                       }
                     }
+                  },
+                  "description": {
+                    "description": "Detailed description of the recipe",
+                    "type": "string",
+                    "example": "A classic Italian pasta dish made with eggs, cheese, pancetta, and pepper."
                   },
                   "instructions": {
                     "type": "string",
                     "description": "Step-by-step instructions to prepare the recipe",
                     "example": "Cook spaghetti, mix with eggs and cheese, add bacon and pepper."
                   },
-                  "info": {
-                    "type": "object",
-                    "properties": {
-                      "category": {
-                        "type": "string",
-                        "description": "Category of the recipe (e.g., main course, dessert)",
-                        "example": "main course"
-                      },
-                      "cookingTime": {
-                        "type": "integer",
-                        "description": "Estimated cooking time in minutes",
-                        "example": 30
-                      },
-                      "foodEnergy": {
-                        "type": "number",
-                        "description": "Estimated food energy in kcal",
-                        "example": 600
-                      }
-                    }
+                  "category": {
+                    "type": "string",
+                    "description": "Category of the recipe (e.g., main course, dessert)",
+                    "example": "main course"
+                  },
+                  "cookingTime": {
+                    "type": "integer",
+                    "description": "Estimated cooking time in minutes",
+                    "example": 30
+                  },
+                  "foodEnergy": {
+                    "type": "number",
+                    "description": "Estimated food energy in kcal",
+                    "example": 600
                   }
                 }
               }
