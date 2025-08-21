@@ -47,7 +47,7 @@ paths:
     patch:
       $ref: ../swagger/paths/recipes/{id}/favourite/patch.yaml
   /api/recipes/favourites:
-    patch:
+    get:
       $ref: ../swagger/paths/recipes/favourites/get.yaml
   /api/recipes/mine:
     get:
@@ -58,7 +58,7 @@ paths:
   /api/ingredients:
     get:
       $ref: ../swagger/paths/ingredients/get.yaml
-  /api/user/me:
+  /api/users/me:
     get:
       $ref: ../swagger/paths/users/me/get.yaml
 components:

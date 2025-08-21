@@ -24,10 +24,11 @@ export const getRecipes = async ({
     searchFilter.name = { $regex: filter.name, $options: 'i' };
   }
   if (filter.category) {
-    searchFilter.category = { $regex: filter.category, $options: 'i' };
+    searchFilter.categoryId = filter.category;
   }
-  if (filter.ingredients && filter.ingredients.length > 0) {
-    searchFilter.ingredients = { $in: filter.ingredients };
+
+  if (filter.ingredients) {
+    searchFilter['ingredients.ingredientId'] = filter.ingredients;
   }
   if (filter.favourite) {
     const [{ recipes, recipesCount }] = await FavouriteCollection.aggregate([
@@ -52,7 +53,10 @@ export const getRecipes = async ({
       { $unwind: { path: '$delRecipe', preserveNullAndEmptyArrays: true } },
       {
         $match: {
-          $or: [{ recipe: searchFilter }, { delRecipe: searchFilter }],
+          $or: [
+            { 'recipe.ingredients.ingredientId': searchFilter.ingredientId },
+            { 'delRecipe.ingredients.ingredientId': searchFilter.ingredientId },
+          ],
         },
       },
       {
@@ -68,6 +72,7 @@ export const getRecipes = async ({
         },
       },
     ]);
+
     const paginationData = calculatePaginationData(
       recipesCount[0]?.count || 0,
       perPage,
@@ -80,7 +85,6 @@ export const getRecipes = async ({
     };
   }
 
-  console.log('searchFilter', searchFilter);
   const [recipesCount, recipes] = await Promise.all([
     RecipesCollection.countDocuments(searchFilter),
     RecipesCollection.find(searchFilter).skip(skip).limit(limit),
@@ -95,7 +99,7 @@ export const getRecipes = async ({
 };
 
 export const getRecipeById = async (recipeId) => {
-  const recipe = await RecipesCollection.findOne(recipeId);
+  const recipe = await RecipesCollection.findOne({ _id: recipeId });
   return recipe;
 };
 
@@ -118,8 +122,10 @@ export const deleteRecipe = async (recipeId, userId) => {
       description: recipe.description,
       cookingTime: recipe.cookingTime,
       foodEnergy: recipe.foodEnergy,
+      category: recipe.category,
       deleted: true,
     });
+
     await FavouriteCollection.updateMany(
       { recipeId: recipe._id },
       { $set: { recipeId: null, delRecipeId: deleted._id } },

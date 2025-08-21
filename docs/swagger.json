@@ -807,7 +807,7 @@
       }
     },
     "/api/recipes/favourites": {
-      "patch": {
+      "get": {
         "tags": [
           "Recipes"
         ],
@@ -1208,7 +1208,7 @@
         }
       }
     },
-    "/api/user/me": {
+    "/api/users/me": {
       "get": {
         "tags": [
           "User"

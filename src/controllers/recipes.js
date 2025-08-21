@@ -76,6 +76,7 @@ export const getFavouriteRecipesController = async (req, res) => {
 
 export const getRecipeByIdController = async (req, res) => {
   const { recipeId } = req.params;
+
   const recipe = await getRecipeById(recipeId);
   if (!recipe) {
     throw createHttpError(404, 'Recipe not found');
@@ -152,10 +153,7 @@ export const deleteRecipeController = async (req, res, next) => {
 
 export const toggleFavouriteRecipeController = async (req, res, next) => {
   const { recipeId } = req.params;
-  const result = await toggleFavouriteRecipe({
-    recipeId,
-    userId: req.user._id,
-  });
+  const result = await toggleFavouriteRecipe(recipeId, req.user._id);
   if (!result) {
     next(createHttpError(404, 'Recipe not found'));
     return;
