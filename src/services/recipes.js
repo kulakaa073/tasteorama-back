@@ -90,6 +90,17 @@ export const getRecipes = async ({
     RecipesCollection.find(searchFilter).skip(skip).limit(limit),
   ]);
 
+  if (userId) {
+    const favs = await FavouriteCollection.find(
+      { userId },
+      { recipeId: 1, _id: 0 },
+    );
+
+    recipes.forEach((recipe) => {
+      recipe.favourite = favs.has(recipe._id.toString());
+    });
+  }
+
   const paginationData = calculatePaginationData(recipesCount, perPage, page);
 
   return {

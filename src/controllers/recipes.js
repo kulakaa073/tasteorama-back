@@ -31,6 +31,7 @@ export const getRecipesController = async (req, res) => {
     //sortBy,
     //sortOrder,
     filter,
+    userId: req.user._id || null,
   });
   res.json({
     status: 200,
